@@ -40,3 +40,7 @@ for (i in 1:nrow(TableCountries)) {
 
 # Combine all saved rows into one data frame
 income_matrix = do.call(rbind, income_results)
+
+
+
+
