@@ -143,7 +143,7 @@ filter(region_un == "Europe")
 unique(df_clean_new$country)
 unique(europe_map$name)
 
-#Changing the names to match the map of RStudio df_clean_new =
+#Changing the names to match the map of RStudio 
 df_clean_new %>% 
   mutate(country = case_when( 
     country == "Czechia" ~ "Czech Republic", 
