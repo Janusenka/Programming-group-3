@@ -11,7 +11,7 @@
     border = "white",
     beside = TRUE,
     las = 2,
-    cex.names = 0.2, #ask
+    cex.names = 0.2, #ask-45
     font.axis = 2,
     xlab = "Sector",
     ylab = "Monthly Income (€)",
