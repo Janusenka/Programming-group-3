@@ -1,7 +1,7 @@
 income_results = list()
 
-for (i in 1:nrow(main_data)) {
-  row = main_data[i, ]
+for (i in 1:nrow(TableCountries)) {
+  row = TableCountries[i, ]
   
   country = row$country
   year = row$year
@@ -40,3 +40,7 @@ for (i in 1:nrow(main_data)) {
 
 # Combine all saved rows into one data frame
 income_matrix = do.call(rbind, income_results)
+
+
+
+

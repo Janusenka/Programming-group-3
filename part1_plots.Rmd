@@ -1,0 +1,217 @@
+
+
+# loading data
+
+```{r}
+# Load the libraries
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+# Clean environment
+rm(list = ls())
+cat("\014") 
+
+# Load the Dataset
+setwd('/Users/sofiachristodoulou/Documents/GitHub')
+df <- read_excel("main_data.csv.xlsx")
+```
+
+# Removing missing values (removing all years from a country if missing value exist) and converting columns to numeric
+
+```{r}
+# Remove countries with any missing values
+countries_with_na <- df %>%
+  group_by(country) %>%
+  filter(any(apply(across(everything(), ~ is.na(.) | . == "" | . == "NA"), 1, any))) %>%
+  distinct(country) %>%
+  pull(country)
+
+df_clean <- df %>% filter(!(country %in% countries_with_na))
+
+# Convert relevant columns to numeric
+df_clean$gender_pay_gap <- as.numeric(df_clean$gender_pay_gap)
+df_clean$monthly_income <- as.numeric(df_clean$monthly_income)
+df_clean$p_female       <- as.numeric(df_clean$p_female)
+df_clean$p_male         <- as.numeric(df_clean$p_male)
+```
+
+
+# Calculating variables using the formulas
+```{r}
+# Calculate male and female income using the GPG formula
+income_results <- list()
+
+for (i in 1:nrow(df_clean)) {
+  row <- df_clean[i, ]
+  
+  country <- row$country
+  year <- row$year
+  avg_income <- row$monthly_income
+  gpg <- row$gender_pay_gap / 100
+  p_f <- row$p_female
+  p_m <- row$p_male
+  
+  if (any(is.na(c(avg_income, gpg, p_f, p_m))) || (p_m + p_f * (1 - gpg) == 0)) {
+    next
+  }
+  
+  male_inc <- avg_income / (p_m + p_f * (1 - gpg))
+  female_inc <- male_inc * (1 - gpg)
+  
+  income_results[[length(income_results) + 1]] <- data.frame(
+    country = country,
+    year = year,
+    male_income = round(male_inc, 2),
+    female_income = round(female_inc, 2)
+  )
+}
+
+
+# Combine all saved rows into one data frame
+income_matrix <- do.call(rbind, income_results)
+
+# Merge income data with cleaned dataset
+df_clean_new <- df_clean %>%
+  left_join(income_matrix, by = c("country", "year"))
+
+# Calculate Female Income Share
+df_clean_new <- df_clean_new %>%
+  mutate(female_income_share = (female_income / (female_income + male_income)) * 100)
+
+```
+
+# Creating 4 different plots (average female income share by country and female income share by country in 2021, 2022, 2023)
+```{r}
+# Plot Female Income Share by Country (Average over Time)
+
+df_clean_new %>% 
+  group_by(country) %>%
+  summarise(avg_female_income_share = mean(female_income_share, na.rm = TRUE))%>% 
+  ggplot(aes(x = reorder(country, -avg_female_income_share), y =
+  avg_female_income_share)) + 
+  geom_bar(stat = "identity", fill ="skyblue") +
+  coord_flip() + 
+  labs( title = "Average Female Income Share by Country", x = "Country", y =
+  "Female Income Share (%)" ) +
+  theme_minimal()
+
+# Female Income Share by Country in 2021
+
+df_clean_new %>% 
+  filter(year == 2021) %>% 
+  ggplot(aes(x =reorder(country, -female_income_share), y = female_income_share)) +
+  geom_bar(stat = "identity", fill = "steelblue") + 
+  coord_flip() + 
+  labs(title = "Female Income Share by Country (2021)", x = "Country", y = "Female Income Share (%)" ) + 
+  theme_minimal()
+
+# Female Income Share by Country in 2022
+
+df_clean_new %>% 
+  filter(year == 2022) %>% 
+  ggplot(aes(x =reorder(country, -female_income_share), y = female_income_share)) +
+  geom_bar(stat = "identity", fill = "darkorange") + 
+  coord_flip() + 
+  labs(title = "Female Income Share by Country (2022)", x = "Country", y ="Female Income Share (%)" ) + 
+  theme_minimal()
+
+# Female Income Share by Country in 2023
+
+df_clean_new %>% 
+  filter(year == 2023) %>% 
+  ggplot(aes(x =reorder(country, -female_income_share), y = female_income_share)) +
+  geom_bar(stat = "identity", fill = "forestgreen") + 
+  coord_flip() + labs(title = "Female Income Share by Country (2023)", x = "Country", y = "Female Income Share (%)" ) + 
+  theme_minimal()
+```
+
+# Load the libraries
+```{r}
+library(rnaturalearth) 
+library(rnaturalearthdata) 
+library(sf)
+library(ggplot2) 
+library(dplyr)
+
+# Mapping the female share
+
+europe_map = ne_countries(scale = "medium", returnclass = "sf") %>%
+filter(region_un == "Europe")
+
+#Checking if the names on the map match the ones from the database
+unique(df_clean_new$country)
+unique(europe_map$name)
+
+#Changing the names to match the map of RStudio 
+df_clean_new %>% 
+  mutate(country = case_when( 
+    country == "Czechia" ~ "Czech Republic", 
+    country == "Slovakia" ~ "Slovak Republic", 
+    country == "European Union - 27 countries (from 2020)" ~ NA_character_, TRUE ~
+country )) %>%
+  filter(!is.na(country))
+
+# Plot in map female income share by country (Average over Time)
+
+average_map = europe_map %>% 
+  left_join(avg_data, by = c("name" ="country")) 
+#Plot the map 
+ggplot(average_map) + 
+  geom_sf(aes(fill =female_income_share)) + 
+  scale_fill_viridis_c(option = "plasma", name ="Female Income Share (%)")+ 
+  labs(title = "Average Female Income Share in Europe (2021-2023)") + 
+  coord_sf(xlim = c(-25,45), ylim = c(34,72),expand = FALSE) + 
+  theme_minimal()
+
+#Plot in map the female income share map for 2021
+install.packages("viridis") 
+library(viridis) 
+#Filter the data for 2021
+data_2021 = df_clean_new %>% 
+  filter(year == 2021) 
+#Adding the feamle income share to the correct country shapes 
+map_2021 = europe_map %>%
+left_join(data_2021, by = c("name" = "country")) 
+#Plot the map
+ggplot(map_2021) + 
+  geom_sf(aes(fill = female_income_share)) +
+  scale_fill_viridis_c(option = "plasma", name = "Female Income Share
+  (%)")+ 
+  labs(title = "Female Income Share in Europe (2021)") +
+  coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
+  theme_minimal()
+
+#Plot in map the female income share map for 2022
+
+#Filter the data for 2022 
+data_2022 = df_clean_new %>% 
+  filter(year ==2022) 
+#Adding the feamle income share to the correct country shapes
+map_2022 = europe_map %>% 
+left_join(data_2022, by = c("name" ="country")) 
+#Plot the map 
+ggplot(map_2022) + 
+  geom_sf(aes(fill =female_income_share)) +
+  scale_fill_viridis_c(option = "plasma", name ="Female Income Share
+  (%)")+ 
+  labs(title = "Female Income Share in Europe(2022)") + 
+  coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
+  theme_minimal()
+
+#Plot in map the female income share map for 2022
+
+#Filter the data for 2023
+data_2023 = df_clean_new %>% 
+  filter(year ==2023) 
+#Adding the feamle income share to the correct country shapes
+map_2023 = europe_map %>% 
+  left_join(data_2023, by = c("name" ="country")) 
+#Plot the map 
+ggplot(map_2023) + 
+  geom_sf(aes(fill =female_income_share)) +
+  scale_fill_viridis_c(option = "plasma", name ="Female Income Share (%)")+
+  labs(title = "Female Income Share in Europe(2023)") +
+  coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
+  theme_minimal()
+```
