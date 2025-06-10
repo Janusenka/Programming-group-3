@@ -8,9 +8,6 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 
-# Clean environment
-rm(list = ls())
-cat("\014") 
 
 # Load the Dataset
 setwd('/Users/sofiachristodoulou/Documents/GitHub')
@@ -153,11 +150,14 @@ country )) %>%
   filter(!is.na(country))
 
 # Plot in map female income share by country (Average over Time)
+avg_data = df_clean_new %>% 
+  group_by(country) %>% 
+  summarise(female_income_share = mean(female_income_share, na.rm = TRUE))
 
-average_map = europe_map %>% 
+av_map = europe_map %>% 
   left_join(avg_data, by = c("name" ="country")) 
 #Plot the map 
-ggplot(average_map) + 
+ggplot(av_map) + 
   geom_sf(aes(fill =female_income_share)) + 
   scale_fill_viridis_c(option = "plasma", name ="Female Income Share (%)")+ 
   labs(title = "Average Female Income Share in Europe (2021-2023)") + 
