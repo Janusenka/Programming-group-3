@@ -1,0 +1,23 @@
+sector,income_eur,gpg_2023,occupation_category,p_female,p_male
+Financial and insurance activities,5841,26,Professionals,0.501,0.499
+Information and communication,5769,21,Professionals,0.501,0.499
+"Professional, scientific and technical activities",5436,26,Professionals,0.501,0.499
+"Electricity, gas, steam, air conditioning supply",5352,14,Technicians and associate professionals,0.537,0.46299999999999997
+Education,4733,9,Professionals,0.501,0.499
+Mining and quarrying,4544,2,Craft and related trades workers,0.102,0.898
+Manufacturing,4502,19,Plant and machine operators and assemblers,0.153,0.847
+Real estate activities,4358,12,Clerical support workers,0.655,0.345
+Services (total),4342,18,Service and sales workers,0.619,0.381
+Industry (total),4338,13,Machine operators,0.153,0.847
+Other industry services,4323,13,Technicians,0.537,0.46299999999999997
+Human health and social work activities,4272,20,Professionals,0.501,0.499
+Public admin. and defence,4254,10,Clerical support workers,0.655,0.345
+"Art, entertainment and recreation",4106,20,Service and sales workers,0.619,0.381
+Trade,4015,19,Service and sales workers,0.619,0.381
+Other service activities,3845,14,Service and sales workers,0.619,0.381
+Water supply,3828,-1,Plant and machine operators,0.153,0.847
+Construction,3597,12,Craft and related trades workers,0.102,0.898
+Transport and storage,3571,1,Plant and machine operators and assemblers,0.153,0.847
+Other economic services,3359,14,Service workers,0.619,0.381
+Hospitality,2860,6,Service and sales workers,0.619,0.381
+"Agriculture, forestry and fishing",2798,0,"Skilled agricultural, forestry and fishery workers",0.207,0.793
