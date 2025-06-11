@@ -7,7 +7,6 @@ table(df$income_quartile)
 
 # Group summary by quartile
 library(dplyr)
-
 quartile_summary <- df %>%
   group_by(income_quartile) %>%
   summarise(
