@@ -16,6 +16,7 @@ mp = barplot(income_matrix,
   xlab = "Sector",
   ylab = "Monthly Income (€)",
   main = "Male vs. Female Income by Sector (Germany 2023)",
+  ylim = c(0, 7000),  
   legend = rownames(income_matrix),
   args.legend = list(x = "topright", bty = "n", inset = 0.01),
   font.lab = 2)
