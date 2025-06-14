@@ -3,7 +3,7 @@ library(tidyr)
 library(dplyr)
 
 # Reshape to long format across years and genders
-df_long_gender <- TableCountries %>%
+df_long_gender = TableCountries %>%
   filter(year %in% c(2021, 2022, 2023)) %>%
   select(country, year, p_female, p_male) %>%
   pivot_longer(cols = c(p_female, p_male),
