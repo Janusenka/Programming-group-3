@@ -4,7 +4,7 @@ library(dplyr)
 
 
 #Reshape to long format
-df_long_gender <- Germany_subgroup %>%
+df_long_gender = Germany_subgroup %>%
   select(sector, p_female, p_male) %>%
   pivot_longer(cols = c(p_female, p_male),
     names_to = "gender",
