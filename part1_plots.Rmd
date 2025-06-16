@@ -8,9 +8,6 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 
-# Clean environment
-rm(list = ls())
-cat("\014") 
 
 # Load the Dataset
 setwd('/Users/sofiachristodoulou/Documents/GitHub')
@@ -124,7 +121,20 @@ df_clean_new %>%
   geom_bar(stat = "identity", fill = "forestgreen") + 
   coord_flip() + labs(title = "Female Income Share by Country (2023)", x = "Country", y = "Female Income Share (%)" ) + 
   theme_minimal()
+
 ```
+
+```{r}
+
+mean_by_country <- df_clean_new %>%
+  group_by(country) %>%
+  summarise(mean_female_income_share = mean(female_income_share)) %>%
+  arrange(desc(mean_female_income_share))
+
+# Print as a table
+print(mean_by_country)
+```
+
 
 # Load the libraries
 ```{r}
@@ -153,14 +163,17 @@ country )) %>%
   filter(!is.na(country))
 
 # Plot in map female income share by country (Average over Time)
+avg_data = df_clean_new %>% 
+  group_by(country) %>% 
+  summarise(female_income_share = mean(female_income_share, na.rm = TRUE))
 
-average_map = europe_map %>% 
+av_map = europe_map %>% 
   left_join(avg_data, by = c("name" ="country")) 
 #Plot the map 
-ggplot(average_map) + 
+ggplot(av_map) + 
   geom_sf(aes(fill =female_income_share)) + 
   scale_fill_viridis_c(option = "plasma", name ="Female Income Share (%)")+ 
-  labs(title = "Average Female Income Share in Europe (2021-2023)") + 
+  labs(title = "Average Female Income Share in Europe (2021-2023), (46.76)") + 
   coord_sf(xlim = c(-25,45), ylim = c(34,72),expand = FALSE) + 
   theme_minimal()
 
@@ -178,7 +191,7 @@ ggplot(map_2021) +
   geom_sf(aes(fill = female_income_share)) +
   scale_fill_viridis_c(option = "plasma", name = "Female Income Share
   (%)")+ 
-  labs(title = "Female Income Share in Europe (2021)") +
+  labs(title = "Female Income Share in Europe (2021), (46.72)") +
   coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
   theme_minimal()
 
@@ -195,7 +208,7 @@ ggplot(map_2022) +
   geom_sf(aes(fill =female_income_share)) +
   scale_fill_viridis_c(option = "plasma", name ="Female Income Share
   (%)")+ 
-  labs(title = "Female Income Share in Europe(2022)") + 
+  labs(title = "Female Income Share in Europe(2022), (46.75)") + 
   coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
   theme_minimal()
 
@@ -211,7 +224,11 @@ map_2023 = europe_map %>%
 ggplot(map_2023) + 
   geom_sf(aes(fill =female_income_share)) +
   scale_fill_viridis_c(option = "plasma", name ="Female Income Share (%)")+
-  labs(title = "Female Income Share in Europe(2023)") +
+  labs(title = "Female Income Share in Europe(2023), (46.81)") +
   coord_sf(xlim = c(-25,45), ylim = c(34,72), expand = FALSE) +
   theme_minimal()
 ```
+
+
+
+
