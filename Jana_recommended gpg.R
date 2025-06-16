@@ -20,7 +20,7 @@ filtered_data = TableCountries %>%
 
 # 7x4 plot with fixed y-axis
 ggplot(filtered_data, aes(x = year, y = gender_pay_gap, group = 1)) +
-  geom_line(color = "orchid1", size = 0.7) +
+  geom_line(color = "orchid1", linewidth = 0.7) +
   geom_point(color = "violetred4", size = 2) +
   facet_wrap(~ country, ncol = 4, nrow = 7) +
   scale_y_continuous(limits = c(-1, 22)) +
@@ -36,3 +36,4 @@ ggplot(filtered_data, aes(x = year, y = gender_pay_gap, group = 1)) +
     panel.grid.major = element_line(color = "grey90"),
     panel.grid.minor = element_blank()
   )
+
