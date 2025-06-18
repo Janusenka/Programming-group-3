@@ -1,0 +1,75 @@
+---
+title: "PROGRAMMING"
+author: "Jana Flakova"
+date: "2025-06-18"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Part 2 - Data Sourcing
+
+### 2.1 Load in the Data
+
+We'll be using two datasets in this project:
+
+1.  A custom dataset on the Gender Pay Gap in the EU (loaded from a CSV)
+2.  A dataset on sectoral wages and gender workforce distribution in Germany (2023)
+
+```{r Libraries, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r Datasets}
+TableCountries = read.csv("data/TableCountries.csv")  
+Germany_subgroup = read.csv("data/Germany_subgroup/Germany_subgroup.csv")
+```
+
+### 2.2 Short Summary
+
+```{r Preview Datasets}
+head(TableCountries)
+head(Germany_subgroup)
+```
+
+### 2.3 Metadata Description
+
+#### Main Dataset: EU Gender Pay Gap Data (2021–2023)
+
+-   **Title**: EU Gender Pay Gap and Workforce Composition\
+-   **Years Covered**: 2021, 2022, 2023\
+-   **Geographic Scope**: All EU countries + EU-27 aggregate\
+-   **Sources**: Eurostat, EIGE\
+-   **Units**:
+    -   `monthly_income`: Euros (gross, monthly)\
+    -   `gender_pay_gap`: Percentage (%)\
+    -   `p_female`, `p_male`: Share in workforce (0–1)
+-   **Variables**:
+    -   `country`: Country name (categorical)\
+    -   `year`: Observation year (numeric)\
+    -   `gender_pay_gap`: Unadjusted gender pay gap\
+    -   `monthly_income`: Average monthly gross income\
+    -   `p_female` / `p_male`: Workforce gender shares
+-   **Collection Method**: Administrative statistics, not survey-based
+
+------------------------------------------------------------------------
+
+#### Subgroup Dataset: Germany by Sector (2023)
+
+-   **Title**: Sectoral Gender Pay Gap and Earnings – Germany\
+-   **Year**: 2023 (with income data likely from 2022)\
+-   **Scope**: Sector-level data for Germany\
+-   **Sources**: Statista, Destatis\
+-   **Units**:
+    -   `income_eur`: Euros (gross, monthly)\
+    -   `gpg_2023`: Percentage (%)\
+    -   `p_female`, `p_male`: Share in workforce (0–1)
+-   **Variables**:
+    -   `sector`: Economic sector name (categorical)\
+    -   `income_eur`: Average monthly income\
+    -   `gpg_2023`: Gender pay gap\
+    -   `occupation_category`: Dominant occupational group\
+    -   `p_female` / `p_male`: Workforce gender shares
+-   **Collection Method**: Aggregated administrative data
