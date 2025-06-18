@@ -62,3 +62,4 @@ ggplot(map_data) +
   coord_sf(xlim = eu_xlim, ylim = eu_ylim, expand = FALSE) +
   labs(title = "Average Income (No-GPG, 2022)", fill = "€ / month") +
   map_theme
+
