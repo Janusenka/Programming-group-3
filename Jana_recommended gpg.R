@@ -37,3 +37,4 @@ ggplot(filtered_data, aes(x = year, y = gender_pay_gap, group = 1)) +
     panel.grid.minor = element_blank()
   )
 
+
