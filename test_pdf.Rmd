@@ -23,7 +23,7 @@ library(rnaturalearthdata)
 
 ## 1.1 Describe the Social Problem
 
-ALIYA
+Aliya
 
 **References**:  
 ALIYA 
@@ -48,12 +48,13 @@ The EU-wide data set includes country-level variables such as the gender pay gap
 
 ## 2.3 Describe the Type of Variables
 
-The data sets are compiled from administrative sources such as Eurostat and Destatis. Variables include:
-- **gender_pay_gap**: percentage difference in male vs female income
-- **monthly_income**: average monthly gross pay (€)
-- **p_female / p_male**: employment shares by gender
-- **income_eur**: average monthly income by sector in Germany
-- **gpg_2023**: sector-specific gender pay gap
+The datasets are compiled from administrative sources such as Eurostat and Destatis. Variables include:
+
+- `gender_pay_gap`: Percentage difference in male vs female income
+- `monthly_income`: Average monthly gross pay (€)
+- `p_female` / `p_male`: Employment shares by gender
+- `income_eur`: Average monthly income by sector in Germany
+- `gpg_2023`: Sector-specific gender pay gap
 
 # Part 3 - Quantifying
 
@@ -109,7 +110,7 @@ Germany_subgroup$female_income = round(female_income, 2)
 
 ## 3.3 Visualize Temporal Variation
 
-```{r temporal-gpg, fig.width=12, fig.height=8, dpi=300}
+```{r temporal-gpg, fig.width=12, fig.height=7, dpi=300}
 eu_countries = c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Netherlands", "Poland", "Portugal", "Romania", "Slovakia", "Slovenia", "Spain", "Sweden")
 
 TableCountries_filtered = TableCountries %>%
@@ -126,7 +127,6 @@ ggplot(TableCountries_filtered, aes(x = year, y = gender_pay_gap, group = 1)) +
     x = "Year", y = "Gender Pay Gap (%)"
   ) +
   theme_minimal(base_size = 11)
-ggsave("gpg_eu_2021_2023.png", width = 12, height = 9, dpi = 300)
 ```
 
 ## 3.4 Visualize Spatial Variation
