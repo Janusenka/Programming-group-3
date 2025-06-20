@@ -47,15 +47,8 @@ p_male <- ggplot() +
   labs(title = "Male Monthly Income (2022)") +
   zoom_europe + big_map_theme
 
-# 7. Average Income Map
-p_avg <- ggplot() +
-  geom_sf(data = all_europe, fill = "grey90", color = "grey70", size = 0.2) +
-  geom_sf(data = europe_map, aes(fill = monthly_income), color = "white", size = 0.3) +
-  scale_fill_gradient(low = "#EBD4FF", high = "#6A0572", name = "€") +
-  labs(title = "Average (No GPG) Monthly Income (2022)") +
-  zoom_europe + big_map_theme
+
 
 # 8. Display all three
 p_female
 p_male
-p_avg
