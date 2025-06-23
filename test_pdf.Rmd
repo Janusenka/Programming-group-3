@@ -22,11 +22,11 @@ library(rnaturalearthdata)
 # Part 1 - Identify a Social Problem
 
 ## 1.1 Describe the Social Problem
+This study report analyzes the gender pay inequality in Europe, with focus on a sectoral structure of Germany as a subgroup. To do so, we estimate average male and female incomes per sector that adjust for female employment share, male employment share, and wage gap.
 
-Aliya
+## Relevance of the issue
 
-**References**:  
-ALIYA 
+The gender pay gap remains a significant social issue in Europe today. The gender pay refers to the difference in male and female earnings. Although there has been progress in promoting gender equality, women in the European Union still earn less than men. This inequality has an impact on women’s economic independence as lower earnings reduce women’s financial stability and independence. Moreover, it also increases the risk of poverty, particularly for elderly women and single mothers. Hence, addressing the gender pay gap issue is essential because equal pay will benefit the whole economy as it increases consumer spending power and promotes social justice. Therefore, our purpose is to analyze the gender pay gap in Europe for the years 2021, 2022, and 2023 to analyze the way it changed over time.
 
 # Part 2 - Data Sourcing
 
@@ -69,6 +69,40 @@ Germany_subgroup$income_quartile = cut(Germany_subgroup$income_eur,
 ```
 
 ## 3.2 Generate Necessary Variables
+To estimate male and female income levels based on the reported average income and gender pay gap, we apply the following logic. The overall average income in each country or sector is calculated as a weighted sum:
+
+$$
+\text{Average Income} = p_{\text{male}} \times \text{Male Income} + p_{\text{female}} \times \text{Female Income}
+$$
+
+The unadjusted gender pay gap (GPG) expresses the percentage by which female income falls short of male income:
+
+$$
+\text{Female Income} = (1 - \text{GPG}) \times \text{Male Income}
+$$
+
+Substituting this into the first equation allows solving for male income:
+
+$$
+\text{Average Income} = p_{\text{male}} \times \text{Male Income} + p_{\text{female}} \times (1 - \text{GPG}) \times \text{Male Income}
+$$
+
+$$
+\text{Average Income} = \text{Male Income} \times \left( p_{\text{male}} + p_{\text{female}} \times (1 - \text{GPG}) \right)
+$$
+
+Thus, male income can be isolated as:
+
+$$
+\text{Male Income} = \frac{\text{Average Income}}{p_{\text{male}} + p_{\text{female}} \times (1 - \text{GPG})}
+$$
+
+Once male income is known, female income follows directly as:
+
+$$
+\text{Female Income} = (1 - \text{GPG}) \times \text{Male Income}
+$$
+
 
 ```{r compute-incomes}
 # EU country-level income estimation
@@ -212,12 +246,38 @@ ggplot(filtered_data, aes(x = year_numeric, y = monthly_income, group = 1)) +
 
 ## 4.1 Discuss Your Findings
 
-WRITE THISSSSSSS
+Our analysis reveals persistent income and gender inequalities across the European Union, both regionally and within sectors. Despite ongoing policy efforts, the Gender Pay Gap (GPG) has remained largely stable between 2021 and 2023, with minimal progress in closing the earnings gap between men and women. Countries such as Germany, Austria, and Finland continue to exhibit some of the highest GPG levels, particularly within high-income economies.
+
+The COVID-19 pandemic acted as a clear economic disruptor, especially in sectors like retail, hospitality, and education (European Parliament, 2021). Following widespread lockdowns and business closures in 2020, most countries experienced stagnant wages in 2021. By 2022 and 2023, as economies reopened, average monthly incomes recovered. However, this recovery was uneven: Western and Northern countries maintained the highest incomes but saw slower relative growth, while Eastern and Southern European countries recorded lower incomes but occasionally larger percentage gains.
+
+Spatial analysis of 2022 income data further highlights regional disparities. Countries like Luxembourg, Germany, and the Netherlands report significantly higher average wages than Bulgaria, Romania, or Portugal. Strong public sectors and wage regulation in some Western countries contribute to more stable income patterns, but high absolute wages do not guarantee gender equality.
+
+A closer look at Germany's 2023 sectoral data exposes structural gender inequalities within the labor market. High-paying industries like finance, IT, and professional services have both low female representation and significant GPGs, whereas sectors like education and public administration show narrower gaps, partly due to standardized pay structures. 
+
+The relationship between income level and inequality is evident in the income quartile breakdown for Germany. Female representation is highest in mid-to-lower income sectors but significantly lower at both the top and bottom of the wage distribution. Meanwhile, the GPG is greatest in the highest income quartile, suggesting that even when women access high-paying roles, they still face considerable earnings disadvantages. Variance in GPG is also high at the top, pointing to structural barriers that persist even in elite sectors.
+
+Overall, our findings indicate that simply increasing average wages is not sufficient to reduce income inequality or close the gender pay gap. Targeted policy interventions addressing occupational segregation, wage transparency, and sector-specific barriers are necessary to create more equitable labor markets across Europe.
+
 
 # Part 5 - Reproducibility
 
 ## 5.1 Github Repository Link
-THISSSSS
+
+https://github.com/Janusenka/Programming-group-3
 
 ## 5.2 Reference List
-THISSSS
+- Average gross monthly earnings by sector Germany 2023. (n.d.). Statista. https://www.statista.com/statistics/1284149/average-gross-monthly-earnings-by-sector-germany/
+- Boll, C., & Lagemann, A. (2019). The Gender Pay Gap in EU Countries – New Evidence Based on EU-SES 2014 Data. *Intereconomics*, 2019(2), 101–105. https://www.intereconomics.eu/contents/year/2019/number/2/article/the-gender-pay-gap-in-eu-countries-new-evidence-based-on-eu-ses-2014-data.html
+- European Parliament. (2020, January 13). Understanding the gender pay gap: definition, facts and causes. Topics | European Parliament. https://www.europarl.europa.eu/topics/en/article/20200109STO69925/understanding-the-gender-pay-gap-definition-facts-and-causes
+- European Parliament. (2021). Impacts of the COVID-19 pandemic on EU Industries. https://www.europarl.europa.eu/RegData/etudes/STUD/2021/662903/IPOL_STU(2021)662903_EN.pdf
+- Eurostat. (2019). Gender Pay Gap in Unadjusted Form. Europa.eu. https://ec.europa.eu/eurostat/databrowser/view/sdg_05_20/default/table?lang=en
+- Gender Equality Index | 2021 | Work | BE | European Institute for Gender Equality. (2021). https://eige.europa.eu/gender-equality-index/2021/domain/work/BE
+- Gender Equality Index | 2022 | Work | BE | European Institute for Gender Equality. (2022). https://eige.europa.eu/gender-equality-index/2022/domain/work/BE
+- Gender Equality Index | 2023 | Work | BE | European Institute for Gender Equality. (2023). https://eige.europa.eu/gender-equality-index/2023/domain/work/BE
+- Klein, F. B., Hill, A. D., Hammond, R., & Stice-Lusvardi, R. (2020). The gender equity gap: A multistudy investigation of within-job inequality in equity-based awards. *Journal of Applied Psychology*, 106(5). https://doi.org/10.1037/apl0000809
+- Participation of women in economic activity by occupations. (2025, May 19). Federal Statistical Office. https://www.destatis.de/EN/Themes/Labour/Labour-Market/Quality-Employment/Dimension1/1_4_ParticipationWomenOccupation.html
+- Unadjusted Gender Pay Gap (GPG) by economic sector. (2025, February 13). Federal Statistical Office. https://www.destatis.de/EN/Themes/Labour/Earnings/GenderPayGap/Tables/ugpg-03-by-economic-sector-at2014.html
+- Understanding the gender pay gap: definition and causes - EU monitor. (2023, April 12). Www.eumonitor.eu. https://www.eumonitor.eu/9353000/1/j9vvik7m1c3gyxp/vl59mpupm0vq?ctx=vk4jic6t1dxz
+- Eurostat. (2023). Employment by sector and full-time equivalents (custom dataset). https://ec.europa.eu/eurostat/databrowser/view/NAMA_10_FTE__custom_4232263/bookmark/table?lang=en&bookmarkId=fafb4e3b-f3aa-4907-9102-16be8df6f775
+- Eurostat. (2024). Employment by sector and full-time equivalents (custom dataset). https://ec.europa.eu/eurostat/databrowser/view/nama_10_fte__custom_13597179/bookmark/table?lang=en&bookmarkId=c29eed24-377e-4763-aaf0-0419906d2ecd
+
