@@ -5,6 +5,7 @@ library(sf)
 library(rnaturalearth)
 library(rnaturalearthdata)
 
+
 # 1. Load full Europe map (for background)
 all_europe <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf") %>%
   filter(region_un == "Europe")
@@ -38,6 +39,8 @@ p_female <- ggplot() +
   scale_fill_gradient(low = "#FFE5EC", high = "#C9184A", name = "€") +
   labs(title = "Female Monthly Income (2022)") +
   zoom_europe + big_map_theme
+p_female
+
 
 # 6. Male Income Map
 p_male <- ggplot() +
@@ -46,7 +49,7 @@ p_male <- ggplot() +
   scale_fill_gradient(low = "#D0E8FF", high = "#00509D", name = "€") +
   labs(title = "Male Monthly Income (2022)") +
   zoom_europe + big_map_theme
-
+p_male
 
 
 # 8. Display all three
